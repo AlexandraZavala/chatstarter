@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import { ConvexClientProvider } from "./convex-client-provider";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -13,7 +14,8 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      {/* this children make sure that anythinf that we wrap in this component will rendered within in*/}
+      <body><ConvexClientProvider>{children}</ConvexClientProvider></body>
     </html>
   );
 }
