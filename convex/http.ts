@@ -58,8 +58,11 @@ const validateRequest = async (req: Request) => {
       'svix-signature': svix_signature!,
     }) as unknown as WebhookEvent;
   } catch (error) {
+    console.error(error);
     return null;
   }
 };
+
+
 
 export default http;

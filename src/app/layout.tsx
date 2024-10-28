@@ -20,7 +20,7 @@ export default function RootLayout({
         <ClerkProvider dynamic>
           <ConvexClientProvider>{children}</ConvexClientProvider>
         </ClerkProvider>
-        </body>
+      </body>
     </html>
   );
 }
