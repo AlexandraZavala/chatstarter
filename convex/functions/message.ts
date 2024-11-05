@@ -1,6 +1,7 @@
 //functions to interact with Message table
 import { v } from "convex/values";
 import { authenticatedMutation, authenticatedQuery } from "./helpers";
+import { internal } from "../_generated/api";
 
 //query to list all messages
 export const list = authenticatedQuery({
@@ -56,6 +57,10 @@ export const create = authenticatedMutation({
       directMessage,
       sender: ctx.user._id,
     });
+    await ctx.scheduler.runAfter(0, internal.functions.typing.remove, {
+      directMessage,
+      user: ctx.user._id,
+    })
   },
 });
 
