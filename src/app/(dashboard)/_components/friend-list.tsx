@@ -3,13 +3,14 @@ import { api } from "../../../../convex/_generated/api";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { CheckIcon, MessageCircleIcon, XIcon } from "lucide-react";
-
+import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { Id } from "../../../../convex/_generated/dataModel";
 
 export function PendingFriendList() {
   const friends = useQuery(api.functions.friend.listPending);
@@ -34,13 +35,13 @@ export function PendingFriendList() {
             title="Accept Friend"
             icon={<CheckIcon />}
             className="bg-green-100"
-            onClick={()=>updateStatus({id:friend._id, status:"accepted"})}
+            onClick={() => updateStatus({ id: friend._id, status: "accepted" })}
           />
           <IconButton
             title="Reject Friend"
             icon={<XIcon />}
             className="bg-red-100"
-            onClick={()=>updateStatus({id:friend._id, status:"rejected"})}
+            onClick={() => updateStatus({ id: friend._id, status: "rejected" })}
           />
         </FriendItem>
       ))}
@@ -51,6 +52,7 @@ export function PendingFriendList() {
 export function AcceptedFriendList() {
   const friends = useQuery(api.functions.friend.listAccepted);
   const updateStatus = useMutation(api.functions.friend.updateStatus);
+
   return (
     <div className="flex flex-col divide-y">
       <h2 className="text-xs font-medium text-muted-foreground p-2.5">
@@ -64,17 +66,29 @@ export function AcceptedFriendList() {
           key={index}
           username={friend.user.username}
           image={friend.user.image}
-        >
-          <IconButton title="Start DM" icon={<MessageCircleIcon /> } onClick={()=>{}} />
+        > 
+          <StartDMButton friendId={friend.user._id} />
           <IconButton
             title="Remove friend"
             icon={<XIcon />}
             className="bg-red-100"
-            onClick={() => updateStatus({id: friend._id, status: "rejected"})}
+            onClick={() => updateStatus({ id: friend._id, status: "rejected" })}
           />
         </FriendItem>
       ))}
     </div>
+  );
+}
+
+function StartDMButton({ friendId }: { friendId: Id<"users"> }) {
+  const router = useRouter();
+  const idDm = useQuery(api.functions.dm.listOne, { idFriend: friendId });
+  return (
+    <IconButton
+      title="Start DM"
+      icon={<MessageCircleIcon />}
+      onClick={() => router.push(`dms/${idDm}`)}
+    />
   );
 }
 

@@ -15,6 +15,25 @@ export const list = authenticatedQuery({
   },
 });
 
+export const listOne = authenticatedQuery({
+  args: {
+    idFriend: v.id("users"),
+  },
+  handler: async (ctx, { idFriend }) => {
+    const directMessagesForCurrentUser = await ctx.db
+      .query("directMessageMembers")
+      .withIndex("by_user", (q) => q.eq("user", ctx.user._id)).collect();
+    const directMessagesForOtherUser = await ctx.db.query("directMessageMembers").withIndex("by_user", (q) => q.eq("user", idFriend)).collect();
+    const directMessage = directMessagesForCurrentUser.find((dm) => directMessagesForOtherUser.find(
+        (dm2) => dm.directMessage ===dm2.directMessage
+    ));
+    if(directMessage){
+        return directMessage.directMessage;
+    }
+    return null;
+  }
+});
+
 export const get = authenticatedQuery({
   args: {
     id: v.id("directMessages"),
