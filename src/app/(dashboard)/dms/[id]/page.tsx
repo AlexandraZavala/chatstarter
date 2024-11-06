@@ -87,15 +87,29 @@ function MessageItem({ message }: { message: Message }) {
         <p className="text-xs text-muted-foreground">
           {message.sender?.username ?? "Deleted user"}
         </p>
-        <p className="text-sm">{message.content}</p>
-        {message.attachment && (
-          <Image
-            src={message.attachment}
-            alt="Attachment"
-            width={300}
-            height={300}
-            className="rounded border overflow-hidden"
-          />
+        {message.deleted ? (
+          <p className="text-sm text-destructive">
+            This message was deleted.{" "}
+            {message.deletedReason && (
+              <span >
+                {" "}
+                Reason: {message.deletedReason}
+              </span>
+            )}
+          </p>
+        ) : (
+          <>
+            <p className="text-sm">{message.content}</p>
+            {message.attachment && (
+              <Image
+                src={message.attachment}
+                alt="Attachment"
+                width={300}
+                height={300}
+                className="rounded border overflow-hidden"
+              />
+            )}
+          </>
         )}
       </div>
       <MessageActions message={message} />
@@ -199,8 +213,8 @@ function MessageInput({
                 }
                 setAttachment(undefined);
                 setFile(undefined);
-                if (fileInputRef.current){
-                  fileInputRef.current.value="";
+                if (fileInputRef.current) {
+                  fileInputRef.current.value = "";
                 }
               }}
             />
