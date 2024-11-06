@@ -29,7 +29,7 @@ export function NewDirectMessage() {
         username: e.currentTarget.username.value,
       });
       setOpen(false);
-      router.push(`dm/${id}`)
+      router.push(`dms/${id}`)
     } catch (error) {
       toast.error("Failed to create direct message", {
         description:
@@ -58,7 +58,7 @@ export function NewDirectMessage() {
             <Input id="username" type="text" />
           </div>
           <DialogFooter>
-            <Button>Send Friend Request</Button>
+            <Button>Send Direct Message</Button>
           </DialogFooter>
         </form>
       </DialogContent>
