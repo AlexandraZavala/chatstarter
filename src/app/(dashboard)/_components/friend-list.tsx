@@ -11,6 +11,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { Id } from "../../../../convex/_generated/dataModel";
+import { toast } from "sonner";
 
 export function PendingFriendList() {
   const friends = useQuery(api.functions.friend.listPending);
@@ -87,7 +88,15 @@ function StartDMButton({ friendId }: { friendId: Id<"users"> }) {
     <IconButton
       title="Start DM"
       icon={<MessageCircleIcon />}
-      onClick={() => router.push(`dms/${idDm}`)}
+      onClick={() => {
+        if (!idDm) {
+          toast.error("You have to start a conversation first");
+          return;
+        }else{
+          router.push(`/dms/${idDm}`);
+        }
+        
+      }}
     />
   );
 }
